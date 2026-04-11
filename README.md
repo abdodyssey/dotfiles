@@ -245,7 +245,7 @@ By the way, related to the Window Switch recommend, I highly recommend disabling
 
 | Screenshots| Keybinding  |
 |---|---|
-| Record a Screencast Interactively  |<kbd>Shift</kbd> + <kbd>Super</kbd> + <kbd>R</kbd> |
+| Record a Screencast Interactively  |<kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>R</kbd> |
 | Take a Screenshot (Fullscreen)| <kbd>Shift</kbd> + <kbd>Super</kbd> + <kbd>F</kbd>|
 | Take a Screenshot Interactively| <kbd>Shift</kbd> + <kbd>Super</kbd> + <kbd>S</kbd>|
 | Take a Screenshot of a Window| <kbd>Shift</kbd> + <kbd>Super</kbd> + <kbd>W</kbd>|
