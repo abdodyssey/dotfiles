@@ -1,0 +1,17 @@
+# Assets & reference — optional untuk repo
+assets/
+themes/
+wallpapers/
+
+# Backup
+*.backup
+.config.backup/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+*.swp
+*.swo
+*~

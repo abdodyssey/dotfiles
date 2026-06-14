@@ -1,0 +1,7 @@
+--target=$HOME
+--ignore=README.md
+--ignore=.gitignore
+--ignore=.stowrc
+--ignore=assets
+--ignore=themes
+--ignore=wallpapers
