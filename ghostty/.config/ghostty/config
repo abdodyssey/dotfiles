@@ -1,0 +1,26 @@
+# Ghostty Configuration
+# Catppuccin Mocha + Intentional Design
+
+# ── Font ────────────────────────────────────────
+font-family = Hack Nerd Font
+font-size = 11
+font-feature = calt=1
+
+# ── Colors (Catppuccin Mocha) ───────────────────
+background = #11111b
+foreground = #cdd6f4
+cursor-color = #89b4fa
+cursor-text = #11111b
+
+# ── Opacity ─────────────────────────────────────
+background-opacity = 0.95
+background-blur-radius = 10
+
+# ── Window ──────────────────────────────────────
+window-padding-x = 10
+window-padding-y = 10
+confirm-close-surface = false
+
+# ── Behavior ────────────────────────────────────
+copy-on-select = false
+shell-integration = zsh
