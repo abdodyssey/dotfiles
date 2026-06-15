@@ -120,9 +120,9 @@ exec {
 # ╔══════════════════════════════════════════════╗
 # ║   Autostart                                  ║
 # ╚══════════════════════════════════════════════╝
-exec_always waybar
-exec_always mako
-exec_always kanshi
+exec_always pkill waybar; waybar &
+exec_always pkill dunst; dunst &
+exec_always pkill kanshi; kanshi &
 
 exec {
     /usr/bin/lxpolkit
@@ -196,8 +196,8 @@ bindsym XF86AudioPrev         exec playerctl previous
 bindsym XF86AudioStop         exec playerctl stop
 
 # Brightness
-bindsym XF86MonBrightnessUp   exec brightnessctl set +10% && notify-send -h int:value:$(brightnessctl get) -h string:synchronous:brightness "Brightness" ""
-bindsym XF86MonBrightnessDown exec brightnessctl set 10%- && notify-send -h int:value:$(brightnessctl get) -h string:synchronous:brightness "Brightness" ""
+bindsym XF86MonBrightnessUp   exec brightnessctl set +10% && notify-send -h int:value:$(brightnessctl get -P) -h string:synchronous:brightness "󰃠 Brightness" "$(brightnessctl get -P)%"
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%- && notify-send -h int:value:$(brightnessctl get -P) -h string:synchronous:brightness "󰃠 Brightness" "$(brightnessctl get -P)%"
 
 # ╔══════════════════════════════════════════════╗
 # ║   Keybindings — Sway WM                      ║
