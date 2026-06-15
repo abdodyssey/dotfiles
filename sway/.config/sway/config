@@ -1,0 +1,347 @@
+# ╔══════════════════════════════════════════════╗
+# ║   Sway Config — Catppuccin Mocha             ║
+# ║   Font: JetBrainsMono Nerd Font              ║
+# ╚══════════════════════════════════════════════╝
+
+# ── Modifier ─────────────────────────────────────
+set $mod Mod4
+set $left h
+set $down j
+set $up k
+set $right l
+
+# ── Apps ─────────────────────────────────────────
+set $term ghostty
+set $menu wofi --show drun
+set $browser firefox
+set $files nautilus
+set $screenshot ~/.local/share/sway/scripts/screenshot.sh
+set $colorpicker ~/.local/share/sway/scripts/colorpicker.sh
+set $powermenu ~/.local/share/sway/scripts/powermenu.sh
+
+# ╔══════════════════════════════════════════════╗
+# ║   Catppuccin Mocha Palette                   ║
+# ╚══════════════════════════════════════════════╝
+set $rosewater #f5e0dc
+set $flamingo  #f2cdcd
+set $pink      #f5c2e7
+set $mauve     #cba6f7
+set $red       #f38ba8
+set $maroon    #eba0ac
+set $peach     #fab387
+set $yellow    #f9e2af
+set $green     #a6e3a1
+set $teal      #94e2d5
+set $sky       #89dceb
+set $sapphire  #74c7ec
+set $blue      #89b4fa
+set $lavender  #b4befe
+set $text      #cdd6f4
+set $subtext1  #bac2de
+set $subtext0  #a6adc8
+set $overlay2  #9399b2
+set $overlay1  #7f849c
+set $overlay0  #6c7086
+set $surface2  #585b70
+set $surface1  #45475a
+set $surface0  #313244
+set $base      #1e1e2e
+set $mantle    #181825
+set $crust     #11111b
+
+# ── Window Colors ────────────────────────────────
+#                       border     bg        text      indicator  child
+client.focused          $mauve     $base     $text     $mauve     $mauve
+client.focused_inactive $surface1  $base     $subtext0 $surface1  $surface1
+client.unfocused        $surface0  $base     $overlay0 $surface0  $surface0
+client.urgent           $red       $base     $text     $red       $red
+client.placeholder      $surface0  $base     $overlay0 $surface0  $surface0
+
+# ╔══════════════════════════════════════════════╗
+# ║   Output & Display                           ║
+# ╚══════════════════════════════════════════════╝
+# Ganti "eDP-1" sesuai output monitor kamu (cek: swaymsg -t get_outputs)
+output eDP-1 {
+    scale 1
+    bg ~/.config/sway/wallpaper.jpg fill
+}
+# Untuk monitor external:
+# output HDMI-A-1 resolution 1920x1080 position 1920,0
+# output HDMI-A-1 bg ~/.config/sway/wallpaper.jpg fill
+
+# ╔══════════════════════════════════════════════╗
+# ║   Input                                      ║
+# ╚══════════════════════════════════════════════╝
+input "type:keyboard" {
+    xkb_layout  us
+    xkb_variant ""
+    xkb_options caps:escape,grp:alt_shift_toggle
+    repeat_delay 300
+    repeat_rate  50
+}
+
+input "type:touchpad" {
+    tap             enabled
+    natural_scroll  enabled
+    dwt             enabled
+    scroll_factor   0.5
+    pointer_accel   0.3
+    middle_emulation enabled
+}
+
+input "type:mouse" {
+    accel_profile flat
+    pointer_accel 0
+}
+
+# ╔══════════════════════════════════════════════╗
+# ║   Appearance                                 ║
+# ╚══════════════════════════════════════════════╝
+font pango:JetBrainsMono Nerd Font 11
+gaps inner 8
+gaps outer 4
+default_border pixel 2
+default_floating_border pixel 2
+smart_gaps on
+smart_borders on
+focus_follows_mouse yes
+mouse_warping none
+workspace_layout default
+
+# ── GTK Theme (via gsettings) ────────────────────
+exec {
+    gsettings set org.gnome.desktop.interface gtk-theme   "Catppuccin-Mocha-Standard-Mauve-Dark"
+    gsettings set org.gnome.desktop.interface icon-theme  "Papirus-Dark"
+    gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Classic"
+    gsettings set org.gnome.desktop.interface font-name   "JetBrainsMono Nerd Font 11"
+    gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+}
+
+# ╔══════════════════════════════════════════════╗
+# ║   Autostart                                  ║
+# ╚══════════════════════════════════════════════╝
+exec_always waybar
+exec_always mako
+exec_always kanshi
+
+exec {
+    /usr/bin/lxpolkit
+    nm-applet --indicator
+    blueman-applet
+    wl-paste --type text  --watch cliphist store
+    wl-paste --type image --watch cliphist store
+    swayidle -w \
+        timeout 300  'swaylock -f' \
+        timeout 600  'swaymsg "output * dpms off"' \
+        resume       'swaymsg "output * dpms on"' \
+        before-sleep 'swaylock -f'
+}
+
+# ╔══════════════════════════════════════════════╗
+# ║   Keybindings — Applications                 ║
+# ╚══════════════════════════════════════════════╝
+# Terminal
+bindsym $mod+Return       exec $term
+bindsym $mod+Shift+Return exec $term --class=floating-term
+
+# Launcher & menus
+bindsym $mod+d            exec $menu
+bindsym $mod+Shift+d      exec wofi --show run
+bindsym $mod+period       exec wofi --show emoji
+
+# Apps
+bindsym $mod+b            exec $browser
+bindsym $mod+e            exec $files
+
+# Power menu
+
+# Clipboard history
+bindsym $mod+v            exec cliphist list | wofi --dmenu -p "Clipboard" | cliphist decode | wl-copy
+
+# Color picker
+bindsym $mod+Shift+c      exec $colorpicker
+
+# Kill window
+bindsym $mod+q            kill
+bindsym $mod+Shift+q      kill
+
+bindsym $mod+Shift+m      exec ~/.local/share/sway/scripts/airplane-mode.sh
+
+# ╔══════════════════════════════════════════════╗
+# ║   Keybindings — Screenshot                   ║
+# ╚══════════════════════════════════════════════╝
+# Full screen
+bindsym Print             exec grim ~/Pictures/Screenshots/$(date +%Y%m%d_%H%M%S).png && notify-send "Screenshot" "Saved to ~/Pictures/Screenshots"
+# Area select → clipboard
+bindsym $mod+Print        exec grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot" "Copied to clipboard"
+# Area select → file
+bindsym $mod+Shift+s      exec grim -g "$(slurp)" ~/Pictures/Screenshots/$(date +%Y%m%d_%H%M%S).png && notify-send "Screenshot" "Saved"
+# Active window
+bindsym $mod+Ctrl+s       exec grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" ~/Pictures/Screenshots/$(date +%Y%m%d_%H%M%S).png
+
+# ╔══════════════════════════════════════════════╗
+# ║   Keybindings — Media & Hardware             ║
+# ╚══════════════════════════════════════════════╝
+# Volume
+bindsym XF86AudioRaiseVolume  exec pamixer -i 5 && pkill -RTMIN+8 waybar
+bindsym XF86AudioLowerVolume  exec pamixer -d 5 && pkill -RTMIN+8 waybar
+bindsym XF86AudioMute         exec pamixer -t   && pkill -RTMIN+8 waybar
+bindsym XF86AudioMicMute      exec pamixer --default-source -t
+
+# Media
+bindsym XF86AudioPlay         exec playerctl play-pause
+bindsym XF86AudioPause        exec playerctl play-pause
+bindsym XF86AudioNext         exec playerctl next
+bindsym XF86AudioPrev         exec playerctl previous
+bindsym XF86AudioStop         exec playerctl stop
+
+# Brightness
+bindsym XF86MonBrightnessUp   exec brightnessctl set +10% && notify-send -h int:value:$(brightnessctl get) -h string:synchronous:brightness "Brightness" ""
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%- && notify-send -h int:value:$(brightnessctl get) -h string:synchronous:brightness "Brightness" ""
+
+# ╔══════════════════════════════════════════════╗
+# ║   Keybindings — Sway WM                      ║
+# ╚══════════════════════════════════════════════╝
+# Reload & exit
+bindsym $mod+Shift+r      reload
+bindsym $mod+Escape exec ~/.local/share/sway/scripts/powermenu.sh
+
+# Lock
+bindsym $mod+Ctrl+l exec swaylock -f
+
+# ── Focus ────────────────────────────────────────
+bindsym $mod+h            focus left
+bindsym $mod+j            focus down
+bindsym $mod+k            focus up
+bindsym $mod+l            focus right
+bindsym $mod+Left         focus left
+bindsym $mod+Down         focus down
+bindsym $mod+Up           focus up
+bindsym $mod+Right        focus right
+
+# ── Move ─────────────────────────────────────────
+bindsym $mod+Shift+h      move left
+bindsym $mod+Shift+j      move down
+bindsym $mod+Shift+k      move up
+bindsym $mod+Shift+l      move right
+bindsym $mod+Shift+Left   move left
+bindsym $mod+Shift+Down   move down
+bindsym $mod+Shift+Up     move up
+bindsym $mod+Shift+Right  move right
+
+# ── Split ────────────────────────────────────────
+bindsym $mod+backslash    splith
+bindsym $mod+minus        splitv
+bindsym $mod+Shift+t      split toggle
+
+# ── Layout ───────────────────────────────────────
+bindsym $mod+s            layout stacking
+bindsym $mod+w            layout tabbed
+bindsym $mod+t            layout toggle split
+bindsym $mod+f            fullscreen toggle
+bindsym $mod+Shift+f      fullscreen toggle global
+bindsym $mod+Shift+space  floating toggle
+bindsym $mod+space        focus mode_toggle
+bindsym $mod+a            focus parent
+bindsym $mod+Shift+a      focus child
+
+# ── Scratchpad ───────────────────────────────────
+bindsym $mod+Shift+minus  move scratchpad
+bindsym $mod+comma        scratchpad show
+
+# ╔══════════════════════════════════════════════╗
+# ║   Workspaces                                 ║
+# ╚══════════════════════════════════════════════╝
+set $ws1  "1"
+set $ws2  "2"
+set $ws3  "3"
+set $ws4  "4"
+set $ws5  "5"
+set $ws6  "6"
+set $ws7  "7"
+set $ws8  "8"
+set $ws9  "9"
+set $ws10 "10"
+
+# Switch
+bindsym $mod+1  workspace $ws1
+bindsym $mod+2  workspace $ws2
+bindsym $mod+3  workspace $ws3
+bindsym $mod+4  workspace $ws4
+bindsym $mod+5  workspace $ws5
+bindsym $mod+6  workspace $ws6
+bindsym $mod+7  workspace $ws7
+bindsym $mod+8  workspace $ws8
+bindsym $mod+9  workspace $ws9
+bindsym $mod+0  workspace $ws10
+
+# Move container to workspace
+bindsym $mod+Shift+1  move container to workspace $ws1
+bindsym $mod+Shift+2  move container to workspace $ws2
+bindsym $mod+Shift+3  move container to workspace $ws3
+bindsym $mod+Shift+4  move container to workspace $ws4
+bindsym $mod+Shift+5  move container to workspace $ws5
+bindsym $mod+Shift+6  move container to workspace $ws6
+bindsym $mod+Shift+7  move container to workspace $ws7
+bindsym $mod+Shift+8  move container to workspace $ws8
+bindsym $mod+Shift+9  move container to workspace $ws9
+bindsym $mod+Shift+0  move container to workspace $ws10
+
+# Navigate workspaces
+bindsym $mod+Tab          workspace next_on_output
+bindsym $mod+Shift+Tab    workspace prev_on_output
+bindsym $mod+bracketright workspace next
+bindsym $mod+bracketleft  workspace prev
+
+# ╔══════════════════════════════════════════════╗
+# ║   Resize Mode                                ║
+# ╚══════════════════════════════════════════════╝
+mode "  resize" {
+    bindsym h      resize shrink width  20px
+    bindsym j      resize grow   height 20px
+    bindsym k      resize shrink height 20px
+    bindsym l      resize grow   width  20px
+    bindsym Left   resize shrink width  20px
+    bindsym Down   resize grow   height 20px
+    bindsym Up     resize shrink height 20px
+    bindsym Right  resize grow   width  20px
+
+    # Fine-grained
+    bindsym Shift+h      resize shrink width  5px
+    bindsym Shift+j      resize grow   height 5px
+    bindsym Shift+k      resize shrink height 5px
+    bindsym Shift+l      resize grow   width  5px
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "  resize"
+
+# ╔══════════════════════════════════════════════╗
+# ║   Floating Rules                             ║
+# ╚══════════════════════════════════════════════╝
+for_window [app_id="floating-term"]            floating enable, resize set 900 600, move position center
+for_window [app_id="pavucontrol"]              floating enable, resize set 650 450, move position center
+for_window [app_id="nm-connection-editor"]     floating enable, move position center
+for_window [app_id="blueman-manager"]          floating enable, resize set 600 450, move position center
+for_window [app_id="gnome-calculator"]         floating enable, move position center
+for_window [app_id="org.gnome.Nautilus"]       floating enable, resize set 900 600, move position center
+for_window [title="Firefox — Sharing Indicator"] floating enable, kill
+for_window [title="Picture-in-Picture"]        floating enable, sticky enable
+for_window [app_id="wofi"]                     floating enable
+
+# ╔══════════════════════════════════════════════╗
+# ║   Workspace Assignments                      ║
+# ╚══════════════════════════════════════════════╝
+assign [app_id="firefox"]           $ws2
+assign [app_id="org.gnome.Nautilus"] $ws3
+assign [class="Spotify"]            $ws9
+assign [class="discord"]            $ws8
+
+include /etc/sway/config.d/*
+
+# YAZI FILE MANAGER
+
+# Yazi file manager
+bindsym $mod+y exec $term -e yazi
